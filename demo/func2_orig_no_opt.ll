@@ -26,7 +26,7 @@ for.body:                                         ; preds = %for.cond
   %mul1 = mul nsw i32 %mul, %2
   %3 = load i32, ptr %i, align 4
   %idxprom = sext i32 %3 to i64
-  %arrayidx = getelementptr inbounds [100 x i32], ptr %arr, i64 0, i64 %idxprom
+  %arrayidx = getelementptr inbounds [100 x i32], ptr %arr2, i64 0, i64 %idxprom
   store i32 %mul1, ptr %arrayidx, align 4
   %4 = load i32, ptr %i, align 4
   %mul2 = mul nsw i32 %4, 20
@@ -34,7 +34,7 @@ for.body:                                         ; preds = %for.cond
   %mul3 = mul nsw i32 %mul2, %5
   %6 = load i32, ptr %i, align 4
   %idxprom4 = sext i32 %6 to i64
-  %arrayidx5 = getelementptr inbounds [100 x i32], ptr %arr2, i64 0, i64 %idxprom4
+  %arrayidx5 = getelementptr inbounds [100 x i32], ptr %arr, i64 0, i64 %idxprom4
   store i32 %mul3, ptr %arrayidx5, align 4
   br label %for.inc
 
