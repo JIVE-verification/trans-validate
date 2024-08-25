@@ -1,0 +1,16 @@
+As far as I understand (from reading the paper and experimenting with alive-tv),
+Alive2-tv doesn't seem to care about the order of the codes within the loop.
+Rather, it seems like it checks whether a program state (register, memory, etc) holds for each moment of iteration.
+For example, if a for-loop looks like this:
+for(i=0 to 99){
+    arr[i] = i;
+    arr2[i] = i;
+}
+Alive2 doesn't care which one of arr2[i] and arr[i] gets assigned first. It seems to care about arr[i] and arr2[i] get assigned value i at each moment of the iteration.
+
+So, Alive 2 thinks translating the above loop into the loop below is a valid translation.
+for(i=0 to 99){
+    arr2[i] = i;
+    arr[i] = i;
+}
+

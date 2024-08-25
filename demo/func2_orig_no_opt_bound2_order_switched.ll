@@ -9,6 +9,7 @@ entry:
   %x.addr = alloca i32, align 4
   %arr = alloca [100 x i32], align 16
   %arr2 = alloca [100 x i32], align 16
+  %arr3 = alloca [100 x i32], align 16
   %i = alloca i32, align 4
   store i32 %x, ptr %x.addr, align 4
   store i32 0, ptr %i, align 4
@@ -26,7 +27,7 @@ for.body:                                         ; preds = %for.cond
   %mul1 = mul nsw i32 %mul, %2
   %3 = load i32, ptr %i, align 4
   %idxprom = sext i32 %3 to i64
-  %arrayidx = getelementptr inbounds [100 x i32], ptr %arr2, i64 0, i64 %idxprom
+  %arrayidx = getelementptr inbounds [100 x i32], ptr %arr, i64 0, i64 %idxprom
   store i32 %mul1, ptr %arrayidx, align 4
   %4 = load i32, ptr %i, align 4
   %mul2 = mul nsw i32 %4, 20
@@ -34,20 +35,28 @@ for.body:                                         ; preds = %for.cond
   %mul3 = mul nsw i32 %mul2, %5
   %6 = load i32, ptr %i, align 4
   %idxprom4 = sext i32 %6 to i64
-  %arrayidx5 = getelementptr inbounds [100 x i32], ptr %arr, i64 0, i64 %idxprom4
+  %arrayidx5 = getelementptr inbounds [100 x i32], ptr %arr3, i64 0, i64 %idxprom4
   store i32 %mul3, ptr %arrayidx5, align 4
+  %7 = load i32, ptr %i, align 4
+  %mul6 = mul nsw i32 %7, 40
+  %8 = load i32, ptr %x.addr, align 4
+  %mul7 = mul nsw i32 %mul6, %8
+  %9 = load i32, ptr %i, align 4
+  %idxprom8 = sext i32 %9 to i64
+  %arrayidx9 = getelementptr inbounds [100 x i32], ptr %arr2, i64 0, i64 %idxprom8
+  store i32 %mul7, ptr %arrayidx9, align 4
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body
-  %7 = load i32, ptr %i, align 4
-  %inc = add nsw i32 %7, 1
+  %10 = load i32, ptr %i, align 4
+  %inc = add nsw i32 %10, 1
   store i32 %inc, ptr %i, align 4
   br label %for.cond, !llvm.loop !6
 
 for.end:                                          ; preds = %for.cond
-  %arrayidx6 = getelementptr inbounds [100 x i32], ptr %arr, i64 0, i64 20
-  %8 = load i32, ptr %arrayidx6, align 16
-  ret i32 %8
+  %arrayidx10 = getelementptr inbounds [100 x i32], ptr %arr, i64 0, i64 20
+  %11 = load i32, ptr %arrayidx10, align 16
+  ret i32 %11
 }
 
 attributes #0 = { mustprogress noinline nounwind optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
