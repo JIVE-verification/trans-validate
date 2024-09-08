@@ -1,0 +1,280 @@
+
+----------------------------------------
+declare void @__kmpc_for_static_init_4(ptr, i32, i32, ptr, ptr, ptr, ptr, i32, i32)
+declare void @__kmpc_for_static_fini(ptr, i32)
+
+@1 = constant 24 bytes, align 8
+@0 = constant 23 bytes, align 1
+
+define i32 @main() noundef {
+init:
+  %__copy_0 = {i32, i32, i32, i32, ptr} { 0, 514, 0, 22, @0 }
+  store [23 x i8] { 59, 117, 110, 107, 110, 111, 119, 110, 59, 117, 110, 107, 110, 111, 119, 110, 59, 48, 59, 48, 59, 59, 0 }, ptr @0, align 1
+  store {i32, i32, i32, i32, ptr} %__copy_0, ptr @1, align 8
+  br label %#0
+
+#0:
+  %#10 = alloca i64 8, align 8
+  %#11 = alloca i64 8, align 8
+  %#12 = alloca i64 8, align 8
+  %#13 = alloca i64 8, align 8
+  %#14 = alloca i64 4, align 4
+  %#15 = alloca i64 4, align 4
+  %#16 = alloca i64 4, align 4
+  %#17 = alloca i64 4, align 4
+  %#18 = alloca i64 4, align 4
+  %#19 = alloca i64 4, align 4
+  %#20 = alloca i64 4, align 4
+  store ptr %#10, ptr %#13, align 8
+  store i32 0, ptr %#16, align 4
+  store i32 4, ptr %#17, align 4
+  store i32 1, ptr %#18, align 4
+  store i32 0, ptr %#19, align 4
+  %#21 = load ptr, ptr %#12, align 8
+  %#22 = load i32, ptr %#21, align 4
+  call void @__kmpc_for_static_init_4(ptr @1, i32 %#22, i32 34, ptr %#19, ptr %#16, ptr %#17, ptr %#18, i32 1, i32 1)
+  %#23 = load i32, ptr %#17, align 4
+  %#24 = icmp sgt i32 %#23, 4
+  br i1 %#24, label %#2, label %#1
+
+#2:
+  br label %#3
+
+#1:
+  %#25 = load i32, ptr %#17, align 4
+  br label %#3
+
+#3:
+  %#26 = phi i32 [ 4, %#2 ], [ %#25, %#1 ]
+  store i32 %#26, ptr %#17, align 4
+  %#27 = load i32, ptr %#16, align 4
+  store i32 %#27, ptr %#14, align 4
+  br label %#4
+
+#4:
+  %#28 = load i32, ptr %#14, align 4
+  %#29 = load i32, ptr %#17, align 4
+  %#30 = icmp sle i32 %#28, %#29
+  br i1 %#30, label %#5, label %#8
+
+#5:
+  %#31 = load i32, ptr %#14, align 4
+  %#32 = mul nsw i32 %#31, 1
+  %#33 = add nsw i32 0, %#32
+  store i32 %#33, ptr %#20, align 4
+  br label %#6
+
+#6:
+  br label %#7
+
+#7:
+  %#34 = load i32, ptr %#14, align 4
+  %#35 = add nsw i32 %#34, 1
+  store i32 %#35, ptr %#14, align 4
+  br label %#4#2
+
+#4#2:
+  %#28#2 = load i32, ptr %#14, align 4
+  %#29#2 = load i32, ptr %#17, align 4
+  %#30#2 = icmp sle i32 %#28#2, %#29#2
+  br i1 %#30#2, label %#5#2, label %#8
+
+#5#2:
+  %#31#2 = load i32, ptr %#14, align 4
+  %#32#2 = mul nsw i32 %#31#2, 1
+  %#33#2 = add nsw i32 0, %#32#2
+  store i32 %#33#2, ptr %#20, align 4
+  br label %#6#2
+
+#6#2:
+  br label %#7#2
+
+#7#2:
+  %#34#2 = load i32, ptr %#14, align 4
+  %#35#2 = add nsw i32 %#34#2, 1
+  store i32 %#35#2, ptr %#14, align 4
+  br label %#4#3
+
+#4#3:
+  %#28#3 = load i32, ptr %#14, align 4
+  %#29#3 = load i32, ptr %#17, align 4
+  %#30#3 = icmp sle i32 %#28#3, %#29#3
+  br i1 %#30#3, label %#5#3, label %#8
+
+#5#3:
+  %#31#3 = load i32, ptr %#14, align 4
+  %#32#3 = mul nsw i32 %#31#3, 1
+  %#33#3 = add nsw i32 0, %#32#3
+  store i32 %#33#3, ptr %#20, align 4
+  br label %#6#3
+
+#6#3:
+  br label %#7#3
+
+#7#3:
+  %#34#3 = load i32, ptr %#14, align 4
+  %#35#3 = add nsw i32 %#34#3, 1
+  store i32 %#35#3, ptr %#14, align 4
+  br label %#4#4
+
+#4#4:
+  %#28#4 = load i32, ptr %#14, align 4
+  %#29#4 = load i32, ptr %#17, align 4
+  %#30#4 = icmp sle i32 %#28#4, %#29#4
+  br i1 %#30#4, label %#5#4, label %#8
+
+#5#4:
+  %#31#4 = load i32, ptr %#14, align 4
+  %#32#4 = mul nsw i32 %#31#4, 1
+  %#33#4 = add nsw i32 0, %#32#4
+  store i32 %#33#4, ptr %#20, align 4
+  br label %#6#4
+
+#6#4:
+  br label %#7#4
+
+#7#4:
+  %#34#4 = load i32, ptr %#14, align 4
+  %#35#4 = add nsw i32 %#34#4, 1
+  store i32 %#35#4, ptr %#14, align 4
+  br label %#4#5
+
+#4#5:
+  %#28#5 = load i32, ptr %#14, align 4
+  %#29#5 = load i32, ptr %#17, align 4
+  %#30#5 = icmp sle i32 %#28#5, %#29#5
+  br i1 %#30#5, label %#5#5, label %#8
+
+#5#5:
+  %#31#5 = load i32, ptr %#14, align 4
+  %#32#5 = mul nsw i32 %#31#5, 1
+  %#33#5 = add nsw i32 0, %#32#5
+  store i32 %#33#5, ptr %#20, align 4
+  br label %#6#5
+
+#6#5:
+  br label %#7#5
+
+#7#5:
+  %#34#5 = load i32, ptr %#14, align 4
+  %#35#5 = add nsw i32 %#34#5, 1
+  store i32 %#35#5, ptr %#14, align 4
+  br label %#4#exit
+
+#4#exit:
+  %#28#exit = load i32, ptr %#14, align 4
+  %#29#exit = load i32, ptr %#17, align 4
+  %#30#exit = icmp sle i32 %#28#exit, %#29#exit
+  br i1 %#30#exit, label #sink, label %#8
+
+#8:
+  br label %#9
+
+#9:
+  call void @__kmpc_for_static_fini(ptr @1, i32 %#22)
+  ret i32 0
+}
+=>
+@1 = constant 24 bytes, align 8
+@0 = constant 23 bytes, align 1
+
+define i32 @main() noundef {
+#0:
+  %#5 = alloca i64 4, align 4
+  %#6 = alloca i64 4, align 4
+  store i32 0, ptr %#5, align 4
+  store i32 0, ptr %#6, align 4
+  br label %#1
+
+#1:
+  %#7 = load i32, ptr %#6, align 4
+  %#8 = icmp slt i32 %#7, 5
+  br i1 %#8, label %#2, label %#4
+
+#2:
+  br label %#3
+
+#3:
+  %#9 = load i32, ptr %#6, align 4
+  %#10 = add nsw i32 %#9, 1
+  store i32 %#10, ptr %#6, align 4
+  br label %#1#2
+
+#1#2:
+  %#7#2 = load i32, ptr %#6, align 4
+  %#8#2 = icmp slt i32 %#7#2, 5
+  br i1 %#8#2, label %#2#2, label %#4
+
+#2#2:
+  br label %#3#2
+
+#3#2:
+  %#9#2 = load i32, ptr %#6, align 4
+  %#10#2 = add nsw i32 %#9#2, 1
+  store i32 %#10#2, ptr %#6, align 4
+  br label %#1#3
+
+#1#3:
+  %#7#3 = load i32, ptr %#6, align 4
+  %#8#3 = icmp slt i32 %#7#3, 5
+  br i1 %#8#3, label %#2#3, label %#4
+
+#2#3:
+  br label %#3#3
+
+#3#3:
+  %#9#3 = load i32, ptr %#6, align 4
+  %#10#3 = add nsw i32 %#9#3, 1
+  store i32 %#10#3, ptr %#6, align 4
+  br label %#1#4
+
+#1#4:
+  %#7#4 = load i32, ptr %#6, align 4
+  %#8#4 = icmp slt i32 %#7#4, 5
+  br i1 %#8#4, label %#2#4, label %#4
+
+#2#4:
+  br label %#3#4
+
+#3#4:
+  %#9#4 = load i32, ptr %#6, align 4
+  %#10#4 = add nsw i32 %#9#4, 1
+  store i32 %#10#4, ptr %#6, align 4
+  br label %#1#5
+
+#1#5:
+  %#7#5 = load i32, ptr %#6, align 4
+  %#8#5 = icmp slt i32 %#7#5, 5
+  br i1 %#8#5, label %#2#5, label %#4
+
+#2#5:
+  br label %#3#5
+
+#3#5:
+  %#9#5 = load i32, ptr %#6, align 4
+  %#10#5 = add nsw i32 %#9#5, 1
+  store i32 %#10#5, ptr %#6, align 4
+  br label %#1#exit
+
+#1#exit:
+  %#7#exit = load i32, ptr %#6, align 4
+  %#8#exit = icmp slt i32 %#7#exit, 5
+  br i1 %#8#exit, label #sink, label %#4
+
+#4:
+  ret i32 0
+}
+
+****************************************
+WARNING: Source function is always UB.
+It can be refined by any target function.
+Please make sure this is what you wanted.
+****************************************
+
+Transformation seems to be correct!
+
+Summary:
+  1 correct transformations
+  0 incorrect transformations
+  0 failed-to-prove transformations
+  0 Alive2 errors
