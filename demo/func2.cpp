@@ -1,13 +1,16 @@
-int func1(int x){
-    
-    int arr[100];
-    int arr2[100];
-    int arr3[100];
+#include <stdio.h>
+#include <omp.h>
 
-    for(int i = 0; i < 100; i++){
-        arr[i] = i*30*x;
-        arr2[i] = i*20*x;
-        arr3[i] = i*40*x;
-    }
-    return arr[20];
+const int n =20;
+
+int main() {
+	int a[n];
+	int b=1000;
+	int i;
+#pragma omp parallel for private(i)
+	for (i = 0; i < n; ++i)
+	{
+		a[i]=b+i;
+	}
+	return 0;
 }
