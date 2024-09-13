@@ -33,7 +33,6 @@ define dso_local noundef i32 @main() #0 {
   store i32 0, ptr %10, align 4
   %12 = load ptr, ptr %3, align 8
   %13 = load i32, ptr %12, align 4
-  call void @__kmpc_for_static_init_4(ptr @1, i32 %13, i32 34, ptr %10, ptr %7, ptr %8, ptr %9, i32 1, i32 1)
   %14 = load i32, ptr %8, align 4
   %15 = icmp sgt i32 %14, 4
   br i1 %15, label %16, label %17
@@ -78,7 +77,6 @@ define dso_local noundef i32 @main() #0 {
   br label %35
 
 35:                                               ; preds = %34
-  call void @__kmpc_for_static_fini(ptr @1, i32 %13)
   ret i32 0
 }
 
