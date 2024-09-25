@@ -1,13 +1,13 @@
-int main(){
+int func(int arr[]){
     int N = 100;
-    int arr[N];
-    int arr2[N];
+    //int arr[N];
+
     for(int i = 1; i < 99; i++){
-        arr2[0] = arr2[i];
-    }
-    if(N == 0){
-        return 1;
+        arr[i] = arr[i+1];
     }
 
-    return 1;
+    // for(int i = 1; i < 99; i++){
+    //     arr[i] = arr[i] + arr[i];
+    // }
+    return 0;
 }

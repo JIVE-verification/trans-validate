@@ -1,10 +1,14 @@
-int main(){
-    int N = 100;
-    int arr[N];
+//#include<omp.h>
+//#include<stdio.h>
 
-    for(int i = 1; i < 99; i++){
-        arr[i] = arr[i+1];
+void reduction(int *v2){
+    int v = 0;
+    //#pragma omp parallel for reduction(+:v)
+    for(int i = 0; i < 10; i++){
+        v += i;
     }
-
-    return 0;
+    *v2 = v;
+    //printf("%d\n",v);
 }
+
+

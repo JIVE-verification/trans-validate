@@ -1,75 +1,181 @@
 ; ModuleID = 'DoAll1.cpp'
 source_filename = "DoAll1.cpp"
-target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
-target triple = "x86_64-pc-linux-gnu"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress noinline norecurse nounwind optnone uwtable
-define dso_local noundef i32 @main() #0 {
-  %1 = alloca i32, align 4
-  %2 = alloca i32, align 4
-  %3 = alloca i8*, align 8
-  %4 = alloca i64, align 8
-  %5 = alloca i32, align 4
-  store i32 0, i32* %1, align 4
-  store i32 100, i32* %2, align 4
-  %6 = load i32, i32* %2, align 4
-  %7 = zext i32 %6 to i64
-  %8 = call i8* @llvm.stacksave()
-  store i8* %8, i8** %3, align 8
-  %9 = alloca i32, i64 %7, align 16
-  store i64 %7, i64* %4, align 8
-  store i32 1, i32* %5, align 4
-  br label %10
+%struct.ident_t = type { i32, i32, i32, i32, ptr }
 
-10:                                               ; preds = %22, %0
-  %11 = load i32, i32* %5, align 4
-  %12 = icmp slt i32 %11, 99
-  br i1 %12, label %13, label %25
+@0 = private unnamed_addr constant [23 x i8] c";unknown;unknown;0;0;;\00", align 1
+@1 = private unnamed_addr constant %struct.ident_t { i32 0, i32 514, i32 0, i32 22, ptr @0 }, align 8
+@.gomp_critical_user_.reduction.var = common global [8 x i32] zeroinitializer, align 8
+@2 = private unnamed_addr constant %struct.ident_t { i32 0, i32 18, i32 0, i32 22, ptr @0 }, align 8
+@3 = private unnamed_addr constant %struct.ident_t { i32 0, i32 2, i32 0, i32 22, ptr @0 }, align 8
 
-13:                                               ; preds = %10
-  %14 = load i32, i32* %5, align 4
-  %15 = add nsw i32 %14, 1
-  %16 = sext i32 %15 to i64
-  %17 = getelementptr inbounds i32, i32* %9, i64 %16
-  %18 = load i32, i32* %17, align 4
-  %19 = load i32, i32* %5, align 4
-  %20 = sext i32 %19 to i64
-  %21 = getelementptr inbounds i32, i32* %9, i64 %20
-  store i32 %18, i32* %21, align 4
-  br label %22
-
-22:                                               ; preds = %13
-  %23 = load i32, i32* %5, align 4
-  %24 = add nsw i32 %23, 1
-  store i32 %24, i32* %5, align 4
-  br label %10, !llvm.loop !7
-
-25:                                               ; preds = %10
-  store i32 0, i32* %1, align 4
-  %26 = load i8*, i8** %3, align 8
-  call void @llvm.stackrestore(i8* %26)
-  %27 = load i32, i32* %1, align 4
-  ret i32 %27
+; Function Attrs: mustprogress noinline nounwind optnone uwtable
+define dso_local void @_Z9reductionPi(ptr noundef %v2) #0 {
+entry:
+  %v2.addr = alloca ptr, align 8
+  %v = alloca i32, align 4
+  store ptr %v2, ptr %v2.addr, align 8
+  store i32 0, ptr %v, align 4
+  call void (ptr, i32, ptr, ...) @__kmpc_fork_call(ptr @3, i32 1, ptr @_Z9reductionPi.omp_outlined, ptr %v)
+  %0 = load i32, ptr %v, align 4
+  %1 = load ptr, ptr %v2.addr, align 8
+  store i32 %0, ptr %1, align 4
+  ret void
 }
 
-; Function Attrs: nofree nosync nounwind willreturn
-declare i8* @llvm.stacksave() #1
+; Function Attrs: noinline norecurse nounwind optnone uwtable
+define internal void @_Z9reductionPi.omp_outlined(ptr noalias noundef %.global_tid., ptr noalias noundef %.bound_tid., ptr noundef nonnull align 4 dereferenceable(4) %v) #1 {
+entry:
+  %.global_tid..addr = alloca ptr, align 8
+  %.bound_tid..addr = alloca ptr, align 8
+  %v.addr = alloca ptr, align 8
+  %.omp.iv = alloca i32, align 4
+  %tmp = alloca i32, align 4
+  %.omp.lb = alloca i32, align 4
+  %.omp.ub = alloca i32, align 4
+  %.omp.stride = alloca i32, align 4
+  %.omp.is_last = alloca i32, align 4
+  %v1 = alloca i32, align 4
+  %i = alloca i32, align 4
+  %.omp.reduction.red_list = alloca [1 x ptr], align 8
+  store ptr %.global_tid., ptr %.global_tid..addr, align 8
+  store ptr %.bound_tid., ptr %.bound_tid..addr, align 8
+  store ptr %v, ptr %v.addr, align 8
+  %0 = load ptr, ptr %v.addr, align 8
+  store i32 0, ptr %.omp.lb, align 4
+  store i32 9, ptr %.omp.ub, align 4
+  store i32 1, ptr %.omp.stride, align 4
+  store i32 0, ptr %.omp.is_last, align 4
+  store i32 0, ptr %v1, align 4
+  %1 = load ptr, ptr %.global_tid..addr, align 8
+  %2 = load i32, ptr %1, align 4
+  call void @__kmpc_for_static_init_4(ptr @1, i32 %2, i32 34, ptr %.omp.is_last, ptr %.omp.lb, ptr %.omp.ub, ptr %.omp.stride, i32 1, i32 1)
+  %3 = load i32, ptr %.omp.ub, align 4
+  %cmp = icmp sgt i32 %3, 9
+  br i1 %cmp, label %cond.true, label %cond.false
 
-; Function Attrs: nofree nosync nounwind willreturn
-declare void @llvm.stackrestore(i8*) #1
+cond.true:                                        ; preds = %entry
+  br label %cond.end
 
-attributes #0 = { mustprogress noinline norecurse nounwind optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nosync nounwind willreturn }
+cond.false:                                       ; preds = %entry
+  %4 = load i32, ptr %.omp.ub, align 4
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ 9, %cond.true ], [ %4, %cond.false ]
+  store i32 %cond, ptr %.omp.ub, align 4
+  %5 = load i32, ptr %.omp.lb, align 4
+  store i32 %5, ptr %.omp.iv, align 4
+  br label %omp.inner.for.cond
+
+omp.inner.for.cond:                               ; preds = %omp.inner.for.inc, %cond.end
+  %6 = load i32, ptr %.omp.iv, align 4
+  %7 = load i32, ptr %.omp.ub, align 4
+  %cmp2 = icmp sle i32 %6, %7
+  br i1 %cmp2, label %omp.inner.for.body, label %omp.inner.for.end
+
+omp.inner.for.body:                               ; preds = %omp.inner.for.cond
+  %8 = load i32, ptr %.omp.iv, align 4
+  %mul = mul nsw i32 %8, 1
+  %add = add nsw i32 0, %mul
+  store i32 %add, ptr %i, align 4
+  %9 = load i32, ptr %i, align 4
+  %10 = load i32, ptr %v1, align 4
+  %add3 = add nsw i32 %10, %9
+  store i32 %add3, ptr %v1, align 4
+  br label %omp.body.continue
+
+omp.body.continue:                                ; preds = %omp.inner.for.body
+  br label %omp.inner.for.inc
+
+omp.inner.for.inc:                                ; preds = %omp.body.continue
+  %11 = load i32, ptr %.omp.iv, align 4
+  %add4 = add nsw i32 %11, 1
+  store i32 %add4, ptr %.omp.iv, align 4
+  br label %omp.inner.for.cond
+
+omp.inner.for.end:                                ; preds = %omp.inner.for.cond
+  br label %omp.loop.exit
+
+omp.loop.exit:                                    ; preds = %omp.inner.for.end
+  call void @__kmpc_for_static_fini(ptr @1, i32 %2)
+  %12 = getelementptr inbounds [1 x ptr], ptr %.omp.reduction.red_list, i64 0, i64 0
+  store ptr %v1, ptr %12, align 8
+  %13 = call i32 @__kmpc_reduce_nowait(ptr @2, i32 %2, i32 1, i64 8, ptr %.omp.reduction.red_list, ptr @_Z9reductionPi.omp_outlined.omp.reduction.reduction_func, ptr @.gomp_critical_user_.reduction.var)
+  switch i32 %13, label %.omp.reduction.default [
+    i32 1, label %.omp.reduction.case1
+    i32 2, label %.omp.reduction.case2
+  ]
+
+.omp.reduction.case1:                             ; preds = %omp.loop.exit
+  %14 = load i32, ptr %0, align 4
+  %15 = load i32, ptr %v1, align 4
+  %add5 = add nsw i32 %14, %15
+  store i32 %add5, ptr %0, align 4
+  call void @__kmpc_end_reduce_nowait(ptr @2, i32 %2, ptr @.gomp_critical_user_.reduction.var)
+  br label %.omp.reduction.default
+
+.omp.reduction.case2:                             ; preds = %omp.loop.exit
+  %16 = load i32, ptr %v1, align 4
+  %17 = atomicrmw add ptr %0, i32 %16 monotonic, align 4
+  br label %.omp.reduction.default
+
+.omp.reduction.default:                           ; preds = %.omp.reduction.case2, %.omp.reduction.case1, %omp.loop.exit
+  ret void
+}
+
+; Function Attrs: nounwind
+declare void @__kmpc_for_static_init_4(ptr, i32, i32, ptr, ptr, ptr, ptr, i32, i32) #2
+
+; Function Attrs: nounwind
+declare void @__kmpc_for_static_fini(ptr, i32) #2
+
+; Function Attrs: noinline norecurse uwtable
+define internal void @_Z9reductionPi.omp_outlined.omp.reduction.reduction_func(ptr noundef %0, ptr noundef %1) #3 {
+entry:
+  %.addr = alloca ptr, align 8
+  %.addr1 = alloca ptr, align 8
+  store ptr %0, ptr %.addr, align 8
+  store ptr %1, ptr %.addr1, align 8
+  %2 = load ptr, ptr %.addr, align 8
+  %3 = load ptr, ptr %.addr1, align 8
+  %4 = getelementptr inbounds [1 x ptr], ptr %3, i64 0, i64 0
+  %5 = load ptr, ptr %4, align 8
+  %6 = getelementptr inbounds [1 x ptr], ptr %2, i64 0, i64 0
+  %7 = load ptr, ptr %6, align 8
+  %8 = load i32, ptr %7, align 4
+  %9 = load i32, ptr %5, align 4
+  %add = add nsw i32 %8, %9
+  store i32 %add, ptr %7, align 4
+  ret void
+}
+
+; Function Attrs: convergent nounwind
+declare i32 @__kmpc_reduce_nowait(ptr, i32, i32, i64, ptr, ptr, ptr) #4
+
+; Function Attrs: convergent nounwind
+declare void @__kmpc_end_reduce_nowait(ptr, i32, ptr) #4
+
+; Function Attrs: nounwind
+declare !callback !7 void @__kmpc_fork_call(ptr, i32, ptr, ...) #2
+
+attributes #0 = { mustprogress noinline nounwind optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noinline norecurse nounwind optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nounwind }
+attributes #3 = { noinline norecurse uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { convergent nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4, !5}
 !llvm.ident = !{!6}
 
 !0 = !{i32 1, !"wchar_size", i32 4}
-!1 = !{i32 7, !"openmp", i32 50}
-!2 = !{i32 7, !"PIC Level", i32 2}
+!1 = !{i32 7, !"openmp", i32 51}
+!2 = !{i32 8, !"PIC Level", i32 2}
 !3 = !{i32 7, !"PIE Level", i32 2}
-!4 = !{i32 7, !"uwtable", i32 1}
+!4 = !{i32 7, !"uwtable", i32 2}
 !5 = !{i32 7, !"frame-pointer", i32 2}
-!6 = !{!"Ubuntu clang version 14.0.0-1ubuntu1.1"}
-!7 = distinct !{!7, !8}
-!8 = !{!"llvm.loop.mustprogress"}
+!6 = !{!"clang version 20.0.0git (https://github.com/llvm/llvm-project.git 0f521931b85e6b5f798af357cf32a7ae782a848d)"}
+!7 = !{!8}
+!8 = !{i64 2, i64 -1, i64 -1, i1 true}
