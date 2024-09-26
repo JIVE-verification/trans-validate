@@ -1,5 +1,5 @@
-; ModuleID = 'DoAll1.cpp'
-source_filename = "DoAll1.cpp"
+; ModuleID = 'reduction.cpp'
+source_filename = "reduction.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -12,16 +12,16 @@ target triple = "x86_64-unknown-linux-gnu"
 @3 = private unnamed_addr constant %struct.ident_t { i32 0, i32 2, i32 0, i32 22, ptr @0 }, align 8
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local void @_Z9reductionPi(ptr noundef %v2) #0 {
+define dso_local void @_Z9reductionPi(ptr noundef %v2) #0 { ;start of function
 entry:
-  %v2.addr = alloca ptr, align 8
-  %v = alloca i32, align 4
-  store ptr %v2, ptr %v2.addr, align 8
-  store i32 0, ptr %v, align 4
-  call void (ptr, i32, ptr, ...) @__kmpc_fork_call(ptr @3, i32 1, ptr @_Z9reductionPi.omp_outlined, ptr %v)
-  %0 = load i32, ptr %v, align 4
-  %1 = load ptr, ptr %v2.addr, align 8
-  store i32 %0, ptr %1, align 4
+  %v2.addr = alloca ptr, align 8  ; v2.addr = ptr
+  %v = alloca i32, align 4    ; int v
+  store ptr %v2, ptr %v2.addr, align 8  ; store value of %v2 (param) to %v2.addr 
+  store i32 0, ptr %v, align 4          ; v = 0
+  call void (ptr, i32, ptr, ...) @__kmpc_fork_call(ptr @3, i32 1, ptr @_Z9reductionPi.omp_outlined, ptr %v) ; fork call, start parallelization
+  %0 = load i32, ptr %v, align 4      ; load value of v to %0
+  %1 = load ptr, ptr %v2.addr, align 8  ; %1 =  ptr %v2.addr
+  store i32 %0, ptr %1, align 4         ; %1 = %0
   ret void
 }
 
@@ -37,63 +37,65 @@ entry:
   %.omp.ub = alloca i32, align 4
   %.omp.stride = alloca i32, align 4
   %.omp.is_last = alloca i32, align 4
-  %v1 = alloca i32, align 4
-  %i = alloca i32, align 4
-  %.omp.reduction.red_list = alloca [1 x ptr], align 8
+
+  %v1 = alloca i32, align 4 ;local to thread??
+  %i = alloca i32, align 4  ;local to thread??
+
+  %.omp.reduction.red_list = alloca [1 x ptr], align 8  ;reduction list, only 1 var, so size is 1
   store ptr %.global_tid., ptr %.global_tid..addr, align 8
   store ptr %.bound_tid., ptr %.bound_tid..addr, align 8
   store ptr %v, ptr %v.addr, align 8
-  %0 = load ptr, ptr %v.addr, align 8
+  %0 = load ptr, ptr %v.addr, align 8 ; %0 = %v
   store i32 0, ptr %.omp.lb, align 4
   store i32 9, ptr %.omp.ub, align 4
   store i32 1, ptr %.omp.stride, align 4
   store i32 0, ptr %.omp.is_last, align 4
-  store i32 0, ptr %v1, align 4
+  store i32 0, ptr %v1, align 4 ; %v1 = 0
   %1 = load ptr, ptr %.global_tid..addr, align 8
   %2 = load i32, ptr %1, align 4
   call void @__kmpc_for_static_init_4(ptr @1, i32 %2, i32 34, ptr %.omp.is_last, ptr %.omp.lb, ptr %.omp.ub, ptr %.omp.stride, i32 1, i32 1)
   %3 = load i32, ptr %.omp.ub, align 4
   %cmp = icmp sgt i32 %3, 9
-  br i1 %cmp, label %cond.true, label %cond.false
+  br i1 %cmp, label %cond.true, label %cond.false ; assume false
 
 cond.true:                                        ; preds = %entry
   br label %cond.end
 
 cond.false:                                       ; preds = %entry
-  %4 = load i32, ptr %.omp.ub, align 4
+  %4 = load i32, ptr %.omp.ub, align 4  ; %4 = 9
   br label %cond.end
 
 cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi i32 [ 9, %cond.true ], [ %4, %cond.false ]
-  store i32 %cond, ptr %.omp.ub, align 4
-  %5 = load i32, ptr %.omp.lb, align 4
-  store i32 %5, ptr %.omp.iv, align 4
+  %cond = phi i32 [ 9, %cond.true ], [ %4, %cond.false ]  ;%cond = %4 = 9
+  store i32 %cond, ptr %.omp.ub, align 4    ; %omp.ub = %cond = %4 = 9
+  %5 = load i32, ptr %.omp.lb, align 4      ; %5= %omp.lb = 0
+  store i32 %5, ptr %.omp.iv, align 4       ; %omp.iv = %5 = 0 ; iter-val?
   br label %omp.inner.for.cond
 
 omp.inner.for.cond:                               ; preds = %omp.inner.for.inc, %cond.end
-  %6 = load i32, ptr %.omp.iv, align 4
-  %7 = load i32, ptr %.omp.ub, align 4
-  %cmp2 = icmp sle i32 %6, %7
+  %6 = load i32, ptr %.omp.iv, align 4      ;%6 = 0
+  %7 = load i32, ptr %.omp.ub, align 4      ;%7 = 9
+  %cmp2 = icmp sle i32 %6, %7               ; %6 <= %7
   br i1 %cmp2, label %omp.inner.for.body, label %omp.inner.for.end
 
 omp.inner.for.body:                               ; preds = %omp.inner.for.cond
-  %8 = load i32, ptr %.omp.iv, align 4
+  %8 = load i32, ptr %.omp.iv, align 4  ;%8 = %omp.iv = 0
   %mul = mul nsw i32 %8, 1
   %add = add nsw i32 0, %mul
   store i32 %add, ptr %i, align 4
-  %9 = load i32, ptr %i, align 4
-  %10 = load i32, ptr %v1, align 4
-  %add3 = add nsw i32 %10, %9
-  store i32 %add3, ptr %v1, align 4
+  %9 = load i32, ptr %i, align 4 ; %9 = i = 0
+  %10 = load i32, ptr %v1, align 4  ; %10 = %v1 = 0
+  %add3 = add nsw i32 %10, %9 ; %add3 = %9 + %10 = 0
+  store i32 %add3, ptr %v1, align 4 ; %v1 = %add3
   br label %omp.body.continue
 
 omp.body.continue:                                ; preds = %omp.inner.for.body
   br label %omp.inner.for.inc
 
 omp.inner.for.inc:                                ; preds = %omp.body.continue
-  %11 = load i32, ptr %.omp.iv, align 4
-  %add4 = add nsw i32 %11, 1
-  store i32 %add4, ptr %.omp.iv, align 4
+  %11 = load i32, ptr %.omp.iv, align 4 ;%11 = %omp.iv = 0
+  %add4 = add nsw i32 %11, 1        ; %add4= %11 + 1 = 1
+  store i32 %add4, ptr %.omp.iv, align 4  ; %omp.iv = %add4 = 1
   br label %omp.inner.for.cond
 
 omp.inner.for.end:                                ; preds = %omp.inner.for.cond
@@ -105,8 +107,8 @@ omp.loop.exit:                                    ; preds = %omp.inner.for.end
   store ptr %v1, ptr %12, align 8
   %13 = call i32 @__kmpc_reduce_nowait(ptr @2, i32 %2, i32 1, i64 8, ptr %.omp.reduction.red_list, ptr @_Z9reductionPi.omp_outlined.omp.reduction.reduction_func, ptr @.gomp_critical_user_.reduction.var)
   switch i32 %13, label %.omp.reduction.default [
-    i32 1, label %.omp.reduction.case1
-    i32 2, label %.omp.reduction.case2
+    i32 1, label %.omp.reduction.case1  ;case1 is for optimization; if it determines no reduction is needed
+    i32 2, label %.omp.reduction.case2  ;case2 is the one where we actually need reduction
   ]
 
 .omp.reduction.case1:                             ; preds = %omp.loop.exit
@@ -135,6 +137,10 @@ declare void @__kmpc_for_static_fini(ptr, i32) #2
 ; Function Attrs: noinline norecurse uwtable
 define internal void @_Z9reductionPi.omp_outlined.omp.reduction.reduction_func(ptr noundef %0, ptr noundef %1) #3 {
 entry:
+  
+  ;%1 must be the array of pointers to the local copy of the var
+  ;%0 must be the array of pointers to the original vars
+
   %.addr = alloca ptr, align 8
   %.addr1 = alloca ptr, align 8
   store ptr %0, ptr %.addr, align 8

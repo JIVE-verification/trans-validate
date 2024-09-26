@@ -1,29 +1,29 @@
-; ModuleID = 'DoAll2.cpp'
-source_filename = "DoAll2.cpp"
+; ModuleID = 'test.cpp'
+source_filename = "test.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local void @_Z9reductionPi(ptr noundef %v2) #0 {
+define dso_local void @_Z4funcPi(ptr noundef %arr) #0 {
 entry:
-  %v2.addr = alloca ptr, align 8
-  %v = alloca i32, align 4
+  %arr.addr = alloca ptr, align 8
   %i = alloca i32, align 4
-  store ptr %v2, ptr %v2.addr, align 8
-  store i32 0, ptr %v, align 4
+  %i1 = alloca i32, align 4
+  store ptr %arr, ptr %arr.addr, align 8
   store i32 0, ptr %i, align 4
   br label %for.cond
 
 for.cond:                                         ; preds = %for.inc, %entry
   %0 = load i32, ptr %i, align 4
-  %cmp = icmp slt i32 %0, 10
+  %cmp = icmp sle i32 %0, 4
   br i1 %cmp, label %for.body, label %for.end
 
 for.body:                                         ; preds = %for.cond
-  %1 = load i32, ptr %i, align 4
-  %2 = load i32, ptr %v, align 4
-  %add = add nsw i32 %2, %1
-  store i32 %add, ptr %v, align 4
+  %1 = load ptr, ptr %arr.addr, align 8
+  %2 = load i32, ptr %i, align 4
+  %idxprom = sext i32 %2 to i64
+  %arrayidx = getelementptr inbounds i32, ptr %1, i64 %idxprom
+  store i32 0, ptr %arrayidx, align 4
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body
@@ -33,9 +33,29 @@ for.inc:                                          ; preds = %for.body
   br label %for.cond, !llvm.loop !7
 
 for.end:                                          ; preds = %for.cond
-  %4 = load i32, ptr %v, align 4
-  %5 = load ptr, ptr %v2.addr, align 8
-  store i32 %4, ptr %5, align 4
+  store i32 5, ptr %i1, align 4
+  br label %for.cond2
+
+for.cond2:                                        ; preds = %for.inc7, %for.end
+  %4 = load i32, ptr %i1, align 4
+  %cmp3 = icmp sle i32 %4, 9
+  br i1 %cmp3, label %for.body4, label %for.end9
+
+for.body4:                                        ; preds = %for.cond2
+  %5 = load ptr, ptr %arr.addr, align 8
+  %6 = load i32, ptr %i1, align 4
+  %idxprom5 = sext i32 %6 to i64
+  %arrayidx6 = getelementptr inbounds i32, ptr %5, i64 %idxprom5
+  store i32 1, ptr %arrayidx6, align 4
+  br label %for.inc7
+
+for.inc7:                                         ; preds = %for.body4
+  %7 = load i32, ptr %i1, align 4
+  %inc8 = add nsw i32 %7, 1
+  store i32 %inc8, ptr %i1, align 4
+  br label %for.cond2, !llvm.loop !9
+
+for.end9:                                         ; preds = %for.cond2
   ret void
 }
 
@@ -53,3 +73,4 @@ attributes #0 = { mustprogress noinline nounwind optnone uwtable "frame-pointer"
 !6 = !{!"clang version 20.0.0git (https://github.com/llvm/llvm-project.git 0f521931b85e6b5f798af357cf32a7ae782a848d)"}
 !7 = distinct !{!7, !8}
 !8 = !{!"llvm.loop.mustprogress"}
+!9 = distinct !{!9, !8}

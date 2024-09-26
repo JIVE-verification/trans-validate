@@ -1,5 +1,5 @@
 #include<omp.h>
-#include<stdio.h>
+//#include<stdio.h>
 
 void reduction(int *v2){
     int v = 0;
