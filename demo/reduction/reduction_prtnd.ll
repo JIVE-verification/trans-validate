@@ -91,9 +91,9 @@ omp.loop.exit.one:                                    ; preds = %omp.inner.for.e
   br label %.omp.reduction.default.one
 
 .omp.reduction.default.one:                           ; preds = %.omp.reduction.case2, %.omp.reduction.case1, %omp.loop.exit
-  %a = load i32, ptr %v, align 4      ; load value of v to %0
-  %b = load ptr, ptr %v2.addr, align 8  ; %1 =  ptr %v2.addr
-  store i32 %a, ptr %b, align 4         ; %1 = %0
+  ;%a = load i32, ptr %v, align 4      ; load value of v to %0
+  ;%b = load ptr, ptr %v2.addr, align 8  ; %1 =  ptr %v2.addr
+  ;store i32 %a, ptr %b, align 4         ; %1 = %0
   br label %partition.two
 
 
