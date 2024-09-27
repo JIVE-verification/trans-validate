@@ -28,7 +28,7 @@ entry:
   %i = alloca i32, align 4  ;local to thread
 
   store ptr %v, ptr %v.addr, align 8
-  ;%0 = load ptr, ptr %v, align 8 ; %0 = %v
+  %0 = load ptr, ptr %v, align 8 ; %0 = %v
   store i32 0, ptr %.omp.lb, align 4    ;change for each partition
   store i32 4, ptr %.omp.ub, align 4    ;change for each partition
   store i32 1, ptr %.omp.stride, align 4
@@ -86,8 +86,8 @@ omp.loop.exit.one:                                    ; preds = %omp.inner.for.e
   %16 = load i32, ptr %v1, align 4
   %17 = load i32, ptr %v, align 4 ;atomicrmw add ptr %v, i32 %16 monotonic, align 4 ;atmicrmw is not supported by atmicrmw
   %t = add nsw i32 %16, %17
-  %tptr = load ptr, ptr %v , align 8
-  store i32 %t, ptr %tptr, align 4
+  ;%tptr = load ptr, ptr %v , align 8
+  ;store i32 %t, ptr %0, align 4
   br label %.omp.reduction.default.one
 
 .omp.reduction.default.one:                           ; preds = %.omp.reduction.case2, %.omp.reduction.case1, %omp.loop.exit
@@ -107,7 +107,7 @@ partition.two:
   %i_n = alloca i32, align 4  ;local to thread
 
   store ptr %v, ptr %v.addr, align 8
-  ;%18 = load ptr, ptr %v, align 8 ; %0 = %v
+  %18 = load ptr, ptr %v, align 8 ; %0 = %v
   store i32 5, ptr %.omp.lb, align 4    ;change for each partition
   store i32 9, ptr %.omp.ub, align 4    ;change for each partition
   store i32 1, ptr %.omp.stride, align 4
@@ -165,8 +165,8 @@ omp.loop.exit:                                    ; preds = %omp.inner.for.end
   %28 = load i32, ptr %v1_n, align 4
   %29 = load i32, ptr %v, align 4 ;atomicrmw add ptr %v, i32 %28 monotonic, align 4
   %t2 = add nsw i32 %28, %29
-  %tptr2 = load ptr, ptr %v, align 8
-  store i32 %t2, ptr %tptr2, align 4
+  ;%tptr2 = load ptr, ptr %v, align 8
+  ;store i32 %t2, ptr %18, align 4
   br label %.omp.reduction.default
 
 .omp.reduction.default:                           ; preds = %.omp.reduction.case2, %.omp.reduction.case1, %omp.loop.exit
@@ -175,6 +175,8 @@ omp.loop.exit:                                    ; preds = %omp.inner.for.end
   ;========================END_OF_PARTITION_2======================================
 
 ret.of.function:
+  store i32 %t, ptr %0, align 4
+  store i32 %t2, ptr %18, align 4
   %30 = load i32, ptr %v, align 4      ; load value of v to %0
   %31 = load ptr, ptr %v2.addr, align 8  ; %1 =  ptr %v2.addr
   store i32 %30, ptr %31, align 4         ; %1 = %0
