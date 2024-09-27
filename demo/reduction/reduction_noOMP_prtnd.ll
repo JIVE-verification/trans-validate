@@ -3,14 +3,6 @@ source_filename = "reduction.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.ident_t = type { i32, i32, i32, i32, ptr }
-
-@0 = private unnamed_addr constant [23 x i8] c";unknown;unknown;0;0;;\00", align 1
-@1 = private unnamed_addr constant %struct.ident_t { i32 0, i32 514, i32 0, i32 22, ptr @0 }, align 8
-@.gomp_critical_user_.reduction.var = common global [8 x i32] zeroinitializer, align 8
-@2 = private unnamed_addr constant %struct.ident_t { i32 0, i32 18, i32 0, i32 22, ptr @0 }, align 8
-@3 = private unnamed_addr constant %struct.ident_t { i32 0, i32 2, i32 0, i32 22, ptr @0 }, align 8
-
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
 define dso_local void @_Z9reductionPi(ptr noundef %v2) #0 { ;start of function
 entry:
@@ -27,8 +19,6 @@ entry:
   %.omp.ub = alloca i32, align 4
   %.omp.stride = alloca i32, align 4
   %.omp.is_last = alloca i32, align 4
-  
-
   ;=======================End_Of_Globally_Required_Among_partitions==========================================
   
 
@@ -38,7 +28,7 @@ entry:
   %i = alloca i32, align 4  ;local to thread
 
   store ptr %v, ptr %v.addr, align 8
-  %0 = load ptr, ptr %v, align 8 ; %0 = %v
+  ;%0 = load ptr, ptr %v, align 8 ; %0 = %v
   store i32 0, ptr %.omp.lb, align 4    ;change for each partition
   store i32 4, ptr %.omp.ub, align 4    ;change for each partition
   store i32 1, ptr %.omp.stride, align 4
@@ -117,7 +107,7 @@ partition.two:
   %i_n = alloca i32, align 4  ;local to thread
 
   store ptr %v, ptr %v.addr, align 8
-  %18 = load ptr, ptr %v, align 8 ; %0 = %v
+  ;%18 = load ptr, ptr %v, align 8 ; %0 = %v
   store i32 5, ptr %.omp.lb, align 4    ;change for each partition
   store i32 9, ptr %.omp.ub, align 4    ;change for each partition
   store i32 1, ptr %.omp.stride, align 4
@@ -193,27 +183,8 @@ ret.of.function:
 
 
 
-; Function Attrs: nounwind
-declare void @__kmpc_for_static_init_4(ptr, i32, i32, ptr, ptr, ptr, ptr, i32, i32) #2
-
-; Function Attrs: nounwind
-declare void @__kmpc_for_static_fini(ptr, i32) #2
-
-
-; Function Attrs: convergent nounwind
-declare i32 @__kmpc_reduce_nowait(ptr, i32, i32, i64, ptr, ptr, ptr) #4
-
-; Function Attrs: convergent nounwind
-declare void @__kmpc_end_reduce_nowait(ptr, i32, ptr) #4
-
-; Function Attrs: nounwind
-declare !callback !7 void @__kmpc_fork_call(ptr, i32, ptr, ...) #2
-
 attributes #0 = { mustprogress noinline nounwind optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noinline norecurse nounwind optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nounwind }
-attributes #3 = { noinline norecurse uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { convergent nounwind }
+
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4, !5}
 !llvm.ident = !{!6}
