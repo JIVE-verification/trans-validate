@@ -19,6 +19,7 @@ entry:
   %.omp.ub = alloca i32, align 4
   %.omp.stride = alloca i32, align 4
   %.omp.is_last = alloca i32, align 4
+  %0 = alloca ptr, align 8
   ;=======================End_Of_Globally_Required_Among_partitions==========================================
   
 
