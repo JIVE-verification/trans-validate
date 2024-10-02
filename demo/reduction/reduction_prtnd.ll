@@ -8,7 +8,10 @@ define dso_local i32 @_Z9reductionPi() #0 { ;start of function
 entry:
   %v = alloca i32, align 4    ; int v
   store i32 0, ptr %v, align 4          ; v = 0
-
+  ;=========================Start_Of_Global_Region===================================
+  %vptrt1 = alloca ptr, align 8
+  %vptrt2 = alloca ptr, align 8
+  ;=========================End_Of_Global_Region=====================================
  
 
   ;========================START_OF_PARTITION_1====================================
@@ -73,6 +76,7 @@ omp.loop.exit.one:                                    ; preds = %omp.inner.for.e
   br label %.omp.reduction.default.one
 
 .omp.reduction.default.one:                           ; preds = %.omp.reduction.case2, %.omp.reduction.case1, %omp.loop.exit
+  store ptr %v1, ptr %vptrt1, align 8
   br label %partition.two
   ;========================END_OF_PARTITION_1======================================
 
@@ -136,6 +140,7 @@ omp.inner.for.end:                                ; preds = %omp.inner.for.cond
   br label %omp.loop.exit
 
 omp.loop.exit:                                    ; preds = %omp.inner.for.end 
+  store ptr %v1_n, ptr %vptrt2, align 8
   br label %.omp.reduction.default
 
 .omp.reduction.default:                           ; preds = %.omp.reduction.case2, %.omp.reduction.case1, %omp.loop.exit
@@ -144,12 +149,15 @@ omp.loop.exit:                                    ; preds = %omp.inner.for.end
   ;========================END_OF_PARTITION_2======================================
 
 ret.of.function:
-  %30 = load i32, ptr %v1, align 4      ; load value of v to %z
-  %31 = load i32, ptr %v1_n, align 4
-  %32 = add nsw i32 %30, %31
-  store i32 %32, ptr %v, align 4         ; %1 = %z
-  %33 = load i32, ptr %v, align 4
-  ret i32 %33
+  %30 = load ptr, ptr %vptrt1, align 8
+  %31 = load i32, ptr %30, align 4
+
+  %32 = load ptr, ptr %vptrt2, align 8
+  %33 = load i32, ptr %32, align 4
+
+  %34 = add nsw i32 %31, %33
+  store i32 %34, ptr %v, align 4         ; %1 = %z
+  ret i32 %34
 }
 
 
