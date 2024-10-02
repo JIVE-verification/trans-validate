@@ -30,7 +30,7 @@ for.inc:                                          ; preds = %for.body
   %3 = load i32, ptr %i, align 4
   %inc = add nsw i32 %3, 1
   store i32 %inc, ptr %i, align 4
-  br label %for.cond, !llvm.loop !7
+  br label %for.cond, !llvm.loop !6
 
 for.end:                                          ; preds = %for.cond
   store i32 5, ptr %i1, align 4
@@ -53,7 +53,7 @@ for.inc7:                                         ; preds = %for.body4
   %7 = load i32, ptr %i1, align 4
   %inc8 = add nsw i32 %7, 1
   store i32 %inc8, ptr %i1, align 4
-  br label %for.cond2, !llvm.loop !9
+  br label %for.cond2, !llvm.loop !8
 
 for.end9:                                         ; preds = %for.cond2
   ret void
@@ -61,16 +61,15 @@ for.end9:                                         ; preds = %for.cond2
 
 attributes #0 = { mustprogress noinline nounwind optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
-!llvm.module.flags = !{!0, !1, !2, !3, !4, !5}
-!llvm.ident = !{!6}
+!llvm.module.flags = !{!0, !1, !2, !3, !4}
+!llvm.ident = !{!5}
 
 !0 = !{i32 1, !"wchar_size", i32 4}
-!1 = !{i32 7, !"openmp", i32 51}
-!2 = !{i32 8, !"PIC Level", i32 2}
-!3 = !{i32 7, !"PIE Level", i32 2}
-!4 = !{i32 7, !"uwtable", i32 2}
-!5 = !{i32 7, !"frame-pointer", i32 2}
-!6 = !{!"clang version 20.0.0git (https://github.com/llvm/llvm-project.git 0f521931b85e6b5f798af357cf32a7ae782a848d)"}
-!7 = distinct !{!7, !8}
-!8 = !{!"llvm.loop.mustprogress"}
-!9 = distinct !{!9, !8}
+!1 = !{i32 8, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{i32 7, !"uwtable", i32 2}
+!4 = !{i32 7, !"frame-pointer", i32 2}
+!5 = !{!"clang version 20.0.0git (https://github.com/llvm/llvm-project.git 0f521931b85e6b5f798af357cf32a7ae782a848d)"}
+!6 = distinct !{!6, !7}
+!7 = !{!"llvm.loop.mustprogress"}
+!8 = distinct !{!8, !7}
