@@ -2,6 +2,8 @@ Find out what reduce no-wait does
 Manually partition the code into each threadID
 
 
+
+
 FINDINGS:
 inlining works, but calling the functions do not work.
 Need to parition into multiple statements. Copy & paste the loop multiple times, do not call functions
