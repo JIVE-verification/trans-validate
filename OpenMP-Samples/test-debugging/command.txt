@@ -1,2 +1,1 @@
-clang -S -fopenmp -g -emit-llvm -o omp-private-1.ll priv
-ate-1.c
+clang -S -fopenmp -g -emit-llvm -o omp-private-1.ll private-1.c
