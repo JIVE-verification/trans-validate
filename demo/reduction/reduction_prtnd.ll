@@ -3,37 +3,23 @@ source_filename = "reduction.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local void @_Z9reductionPi(ptr noundef %v2) #0 { ;start of function
+; Function Attrs: mustprogress noinline nounwind optnone uwtable ptr noundef %v2
+define dso_local i32 @_Z9reductionPi() #0 { ;start of function
 entry:
-  %v2.addr = alloca ptr, align 8  ; v2.addr = ptr
   %v = alloca i32, align 4    ; int v
-  store ptr %v2, ptr %v2.addr, align 8  ; store value of %v2 (param) to %v2.addr 
   store i32 0, ptr %v, align 4          ; v = 0
 
-  ;=======================Start_Of_Globally_Required_Among_partitions==========================================
-  %v.addr = alloca ptr, align 8
-  %.omp.iv = alloca i32, align 4
-  %tmp = alloca i32, align 4
-  %.omp.lb = alloca i32, align 4
-  %.omp.ub = alloca i32, align 4
-  %.omp.stride = alloca i32, align 4
-  %.omp.is_last = alloca i32, align 4
-  %0 = alloca ptr, align 8
-  ;=======================End_Of_Globally_Required_Among_partitions==========================================
-  
+ 
 
   ;========================START_OF_PARTITION_1====================================
-  
   %v1 = alloca i32, align 4 ;local to thread
   %i = alloca i32, align 4  ;local to thread
+  %.omp.lb = alloca i32, align 4
+  %.omp.ub = alloca i32, align 4
 
-  store ptr %v, ptr %v.addr, align 8
-  %0 = load ptr, ptr %v, align 8 ; %0 = %v
   store i32 0, ptr %.omp.lb, align 4    ;change for each partition
   store i32 4, ptr %.omp.ub, align 4    ;change for each partition
-  store i32 1, ptr %.omp.stride, align 4
-  store i32 0, ptr %.omp.is_last, align 4
+  store i32 0, ptr %i, align 4
   store i32 0, ptr %v1, align 4 ; %v1 = 0
   
   %3 = load i32, ptr %.omp.ub, align 4
@@ -51,17 +37,17 @@ cond.end.one:                                         ; preds = %cond.false, %co
   %cond = phi i32 [ 9, %cond.true.one ], [ %4, %cond.false.one ]  ;%cond = %4 = 9
   store i32 %cond, ptr %.omp.ub, align 4    ; %omp.ub = %cond = %4 = 9
   %5 = load i32, ptr %.omp.lb, align 4      ; %5= %omp.lb = 0
-  store i32 %5, ptr %.omp.iv, align 4       ; %omp.iv = %5 = 0 ; iter-val?
+  store i32 %5, ptr %i, align 4       ; %i = %5 = 0 ; iter-val?
   br label %omp.inner.for.cond.one
 
 omp.inner.for.cond.one:                               ; preds = %omp.inner.for.inc, %cond.end
-  %6 = load i32, ptr %.omp.iv, align 4      ;%6 = 0
+  %6 = load i32, ptr %i, align 4      ;%6 = 0
   %7 = load i32, ptr %.omp.ub, align 4      ;%7 = 9
   %cmp2 = icmp sle i32 %6, %7               ; %6 <= %7
   br i1 %cmp2, label %omp.inner.for.body.one, label %omp.inner.for.end.one
 
 omp.inner.for.body.one:                               ; preds = %omp.inner.for.cond
-  %8 = load i32, ptr %.omp.iv, align 4  ;%8 = %omp.iv = 0
+  %8 = load i32, ptr %i, align 4  ;%8 = %i = 0
   %mul = mul nsw i32 %8, 1
   %add = add nsw i32 0, %mul
   store i32 %add, ptr %i, align 4
@@ -75,47 +61,34 @@ omp.body.continue.one:                                ; preds = %omp.inner.for.b
   br label %omp.inner.for.inc.one
 
 omp.inner.for.inc.one:                                ; preds = %omp.body.continue
-  %11 = load i32, ptr %.omp.iv, align 4 ;%11 = %omp.iv = 0
+  %11 = load i32, ptr %i, align 4 ;%11 = %omp.iv = 0
   %add4 = add nsw i32 %11, 1        ; %add4= %11 + 1 = 1
-  store i32 %add4, ptr %.omp.iv, align 4  ; %omp.iv = %add4 = 1
+  store i32 %add4, ptr %i, align 4  ; %omp.iv = %add4 = 1
   br label %omp.inner.for.cond.one
 
 omp.inner.for.end.one:                                ; preds = %omp.inner.for.cond
   br label %omp.loop.exit.one
 
 omp.loop.exit.one:                                    ; preds = %omp.inner.for.end 
-  %16 = load i32, ptr %v1, align 4
-  %17 = load i32, ptr %v, align 4 ;atomicrmw add ptr %v, i32 %16 monotonic, align 4 ;atmicrmw is not supported by atmicrmw
-  %t = add nsw i32 %16, %17
-  ;%tptr = load ptr, ptr %v , align 8
-  ;store i32 %t, ptr %0, align 4
   br label %.omp.reduction.default.one
 
 .omp.reduction.default.one:                           ; preds = %.omp.reduction.case2, %.omp.reduction.case1, %omp.loop.exit
-  ;%a = load i32, ptr %v, align 4      ; load value of v to %0
-  ;%b = load ptr, ptr %v2.addr, align 8  ; %1 =  ptr %v2.addr
-  ;store i32 %a, ptr %b, align 4         ; %1 = %0
   br label %partition.two
-
-
-
   ;========================END_OF_PARTITION_1======================================
 
   ;========================START_OF_PARTITION_2====================================
 partition.two:
-  
+  %.omp.lb_n = alloca i32, align 4
+  %.omp.ub_n = alloca i32, align 4
   %v1_n = alloca i32, align 4 ;local to thread
   %i_n = alloca i32, align 4  ;local to thread
-
-  store ptr %v, ptr %v.addr, align 8
-  %18 = load ptr, ptr %v, align 8 ; %0 = %v
-  store i32 5, ptr %.omp.lb, align 4    ;change for each partition
-  store i32 9, ptr %.omp.ub, align 4    ;change for each partition
-  store i32 1, ptr %.omp.stride, align 4
-  store i32 0, ptr %.omp.is_last, align 4
-  store i32 0, ptr %v1_n, align 4 ; %v1 = 0
   
-  %19 = load i32, ptr %.omp.ub, align 4
+  store i32 5, ptr %.omp.lb_n, align 4    ;change for each partition
+  store i32 9, ptr %.omp.ub_n, align 4    ;change for each partition
+  store i32 0, ptr %v1_n, align 4
+  store i32 5, ptr %i_n, align 4 
+  
+  %19 = load i32, ptr %.omp.ub_n, align 4
   %cmp_n = icmp sgt i32 %19, 9
   br i1 %cmp_n, label %cond.true, label %cond.false
 
@@ -123,24 +96,24 @@ cond.true:                                        ; preds = %entry
   br label %cond.end
 
 cond.false:                                       ; preds = %entry
-  %20 = load i32, ptr %.omp.ub, align 4  ; %4 = 9
+  %20 = load i32, ptr %.omp.ub_n, align 4  
   br label %cond.end
 
 cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond_n = phi i32 [ 9, %cond.true ], [ %20, %cond.false ]  ;%cond = %4 = 9
-  store i32 %cond_n, ptr %.omp.ub, align 4    ; %omp.ub = %cond = %4 = 9
-  %21 = load i32, ptr %.omp.lb, align 4      ; %5= %omp.lb = 0
-  store i32 %21, ptr %.omp.iv, align 4       ; %omp.iv = %5 = 0 ; iter-val?
+  %cond_n = phi i32 [ 9, %cond.true ], [ %20, %cond.false ]  ;%cond = %20 = 9
+  store i32 %cond_n, ptr %.omp.ub_n, align 4    ; %omp.ub = %cond = %4 = 9
+  %21 = load i32, ptr %.omp.lb_n, align 4      ; %5= %omp.lb = 0
+  store i32 %21, ptr %i_n, align 4       ; %omp.iv = %5 = 0 ; iter-val?
   br label %omp.inner.for.cond
 
 omp.inner.for.cond:                               ; preds = %omp.inner.for.inc, %cond.end
-  %22 = load i32, ptr %.omp.iv, align 4      ;%6 = 0
-  %23 = load i32, ptr %.omp.ub, align 4      ;%7 = 9
+  %22 = load i32, ptr %i_n, align 4      ;%6 = 0
+  %23 = load i32, ptr %.omp.ub_n, align 4      ;%7 = 9
   %cmp2_n = icmp sle i32 %22, %23               ; %6 <= %7
-  br i1 %cmp2, label %omp.inner.for.body, label %omp.inner.for.end
+  br i1 %cmp2_n, label %omp.inner.for.body, label %omp.inner.for.end
 
 omp.inner.for.body:                               ; preds = %omp.inner.for.cond
-  %24 = load i32, ptr %.omp.iv, align 4  ;%8 = %omp.iv = 0
+  %24 = load i32, ptr %i_n, align 4  ;%8 = %omp.iv = 0
   %mul_n = mul nsw i32 %24, 1
   %add_n = add nsw i32 0, %mul_n
   store i32 %add_n, ptr %i_n, align 4
@@ -154,20 +127,15 @@ omp.body.continue:                                ; preds = %omp.inner.for.body
   br label %omp.inner.for.inc
 
 omp.inner.for.inc:                                ; preds = %omp.body.continue
-  %27 = load i32, ptr %.omp.iv, align 4 ;%11 = %omp.iv = 0
+  %27 = load i32, ptr %i_n, align 4 ;%11 = %omp.iv = 0
   %add4_n = add nsw i32 %27, 1        ; %add4= %11 + 1 = 1
-  store i32 %add4_n, ptr %.omp.iv, align 4  ; %omp.iv = %add4 = 1
+  store i32 %add4_n, ptr %i_n, align 4  ; %omp.iv = %add4 = 1
   br label %omp.inner.for.cond
 
 omp.inner.for.end:                                ; preds = %omp.inner.for.cond
   br label %omp.loop.exit
 
 omp.loop.exit:                                    ; preds = %omp.inner.for.end 
-  %28 = load i32, ptr %v1_n, align 4
-  %29 = load i32, ptr %v, align 4 ;atomicrmw add ptr %v, i32 %28 monotonic, align 4
-  %t2 = add nsw i32 %28, %29
-  ;%tptr2 = load ptr, ptr %v, align 8
-  ;store i32 %t2, ptr %18, align 4
   br label %.omp.reduction.default
 
 .omp.reduction.default:                           ; preds = %.omp.reduction.case2, %.omp.reduction.case1, %omp.loop.exit
@@ -176,12 +144,12 @@ omp.loop.exit:                                    ; preds = %omp.inner.for.end
   ;========================END_OF_PARTITION_2======================================
 
 ret.of.function:
-  store i32 %t, ptr %0, align 4
-  store i32 %t2, ptr %18, align 4
-  %30 = load i32, ptr %v, align 4      ; load value of v to %0
-  %31 = load ptr, ptr %v2.addr, align 8  ; %1 =  ptr %v2.addr
-  store i32 %30, ptr %31, align 4         ; %1 = %0
-  ret void
+  %30 = load i32, ptr %v1, align 4      ; load value of v to %z
+  %31 = load i32, ptr %v1_n, align 4
+  %32 = add nsw i32 %30, %31
+  store i32 %32, ptr %v, align 4         ; %1 = %z
+  %33 = load i32, ptr %v, align 4
+  ret i32 %33
 }
 
 
