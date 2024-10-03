@@ -53,7 +53,20 @@ entry:
   store i32 0, ptr %v1, align 4 ; %v1 = 0
   %1 = load ptr, ptr %.global_tid..addr, align 8
   %2 = load i32, ptr %1, align 4
+  ; look into api calls in more detail
+  ; we need to know how threading behaves in openmp
+  ; simple loop with v++ (no reduction)
+
+  
+
+  ;The function computes the upper and lower bounds and stride to be used for the
+  ;set of iterations to be executed by the current thread from the statically
+  ;scheduled loop that is described by the initial values of the bounds, stride,
+  ;increment and chunk size.
+
+  ;param: souce code location, global tid, schedtype, ptr to last iter flag, ptr to lower bound, ptr to upper bound, ptr to stride, loop increment, chunk size
   call void @__kmpc_for_static_init_4(ptr @1, i32 %2, i32 34, ptr %.omp.is_last, ptr %.omp.lb, ptr %.omp.ub, ptr %.omp.stride, i32 1, i32 1)
+  
   %3 = load i32, ptr %.omp.ub, align 4
   %cmp = icmp sgt i32 %3, 9
   br i1 %cmp, label %cond.true, label %cond.false ; assume false
@@ -102,9 +115,27 @@ omp.inner.for.end:                                ; preds = %omp.inner.for.cond
   br label %omp.loop.exit
 
 omp.loop.exit:                                    ; preds = %omp.inner.for.end
+  
+  ;Mark the end of a statically scheduled loop
+  ;param: source code loc, global_tid 
   call void @__kmpc_for_static_fini(ptr @1, i32 %2)
+
+
   %12 = getelementptr inbounds [1 x ptr], ptr %.omp.reduction.red_list, i64 0, i64 0
   store ptr %v1, ptr %12, align 8
+
+  ;reduction function
+  ;PARAMS:
+  ;@param loc source location information
+  ;@param global_tid global thread number
+  ;@param num_vars number of items (variables) to be reduced
+  ;@param reduce_size size of data in bytes to be reduced
+  ;@param reduce_data pointer to data to be reduced
+  ;@param reduce_func callback function providing reduction operation on two
+  ;operands and returning result of reduction in lhs_data
+  ;@param lck pointer to the unique lock data structure
+  ;@result 1 for the master thread, 0 for all other team threads, 2 for all team
+  ;threads if atomic reduction needed
   %13 = call i32 @__kmpc_reduce_nowait(ptr @2, i32 %2, i32 1, i64 8, ptr %.omp.reduction.red_list, ptr @_Z9reductionPi.omp_outlined.omp.reduction.reduction_func, ptr @.gomp_critical_user_.reduction.var)
   switch i32 %13, label %.omp.reduction.default [
     i32 1, label %.omp.reduction.case1  ;case1 is for optimization; if it determines no reduction is needed
